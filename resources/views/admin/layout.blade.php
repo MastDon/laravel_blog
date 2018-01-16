@@ -216,8 +216,8 @@
                     </a>
                 </li>
                 <li><a href="#"><i class="fa fa-sticky-note-o"></i> <span>Посты</span></a></li>
-                <li><a href="#"><i class="fa fa-list-ul"></i> <span>Категории</span></a></li>
-                <li><a href="#"><i class="fa fa-tags"></i> <span>Теги</span></a></li>
+                <li><a href="{{route('categories.index')}}"><i class="fa fa-list-ul"></i> <span>Категории</span></a></li>
+                <li><a href="{{route('tags.index')}}"><i class="fa fa-tags"></i> <span>Теги</span></a></li>
                 <li>
                     <a href="#">
                         <i class="fa fa-commenting"></i> <span>Комментарии</span>
@@ -442,6 +442,11 @@
     <div class="control-sidebar-bg"></div>
 </div>
 <script src="/js/admin.js"></script>
+<script>
+    $(function () {
+        $("#example1").DataTable();
+    });
+</script>
 </body>
 
 <!-- Mirrored from almsaeedstudio.com/themes/AdminLTE/pages/examples/blank.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 Dec 2016 15:13:35 GMT -->
