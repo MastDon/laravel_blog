@@ -21,6 +21,7 @@ Route::group(
     Route::resource('/categories', 'CategoriesController');
     Route::resource('/tags', 'TagsController');
     Route::resource('/users', 'UsersController');
+    Route::resource('/posts', 'PostsController');
 }
 );
 

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Support\Facades\Storage;
@@ -13,18 +14,18 @@ class Post extends Model
     const IS_DRAFT = 0;
     const IS_PUBLIC = 1;
 
-    protected $fillable = ['title', 'content'];
+    protected $fillable = ['title', 'content', 'date'];
 
     public function category()
     {
 
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function author()
     {
 
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function tags()
@@ -67,10 +68,18 @@ class Post extends Model
 
     public function remove()
     {
-        Storage::delete('uploads/' . $this->image);
+        $this->removeImage();
         $this->delete();
     }
 
+    public function removeImage()
+    {
+        if ($this->image != null) {
+
+            Storage::delete('uploads/' . $this->image);
+
+        }
+    }
 
     public function getImage()
 
@@ -78,7 +87,7 @@ class Post extends Model
         if ($this->image == null) {
             return '/img/no-image.png';
         }
-        return '/uploads' . $this->image;
+        return '/uploads/' . $this->image;
     }
 
 
@@ -87,9 +96,10 @@ class Post extends Model
         if ($image == null) {
             return;
         }
-        Storage::delete('uploads/' . $this->image);
+        $this->removeImage();
+
         $filename = str_random(10) . '.' . $image->extension();
-        $image->saveAs('uploads', $filename);
+        $image->storeAs('uploads', $filename);
         $this->image = $filename;
         $this->save();
 
@@ -161,6 +171,29 @@ class Post extends Model
         }
         return $this->setFeatured();
 
+    }
+
+    public function setDateAttribute($value)
+    {
+        $date = Carbon::createFromFormat('d/m/y', $value)->format('Y-m-d');
+        $this->attributes['date'] = $date;
+    }
+
+    public function getCategoryTitle()
+    {
+        return ($this->category != null)
+            ? $this->category->title
+            : 'Нет тегов';
+
+    }
+
+    public function getTagsTitles()
+    {
+
+
+        return (!$this->tags->isEmpty())
+            ? implode(', ', $this->tags->pluck('title')->all())
+            :'Нет тегов';
     }
 
 }
