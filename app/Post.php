@@ -107,7 +107,7 @@ class Post extends Model
 
     public function setCategory($id)
     {
-        if ($id == 0) {
+        if ($id == null) {
             return;
         }
         $this->category_id = $id;
@@ -117,7 +117,7 @@ class Post extends Model
 
     public function setTags($ids)
     {
-        if ($ids == 0) {
+        if ($ids == null) {
             return;
         }
         $this->tags()->sync($ids);
@@ -179,11 +179,20 @@ class Post extends Model
         $this->attributes['date'] = $date;
     }
 
+
+    public function getDateAttribute($value)
+    {
+
+        $date = Carbon::createFromFormat('Y-m-d', $value)->format('d/m/y');
+        return $date;
+
+    }
+
     public function getCategoryTitle()
     {
         return ($this->category != null)
             ? $this->category->title
-            : 'Нет тегов';
+            : 'Нет категории';
 
     }
 
@@ -193,7 +202,7 @@ class Post extends Model
 
         return (!$this->tags->isEmpty())
             ? implode(', ', $this->tags->pluck('title')->all())
-            :'Нет тегов';
+            : 'Нет тегов';
     }
 
 }
