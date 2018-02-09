@@ -20,6 +20,24 @@ class HomeController extends Controller
 
         $post = Post::where('slug', $slug)->firstOrFail();
 
-        return view('pages.show',compact('post'));
+        return view('pages.show', compact('post'));
+    }
+
+    public function tag($slug)
+    {
+        $tag = Tag::where('slug', $slug)->firstOrFail();
+
+        $posts = $tag->posts;
+
+        return view('pages.list', ['posts' => $posts]);
+    }
+
+    public function category($slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        $posts = $category->posts;
+
+        return view('pages.list', ['posts' => $posts]);
     }
 }
