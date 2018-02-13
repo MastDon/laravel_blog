@@ -246,8 +246,12 @@ class Post extends Model
 
     public function related()
     {
-       return self::all()->except($this->id);
+        return self::all()->except($this->id);
     }
 
+    public function hasCategory()
+    {
+        return $this->category != null ? true : false;
 
+    }
 }

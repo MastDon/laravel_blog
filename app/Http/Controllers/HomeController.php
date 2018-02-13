@@ -27,7 +27,7 @@ class HomeController extends Controller
     {
         $tag = Tag::where('slug', $slug)->firstOrFail();
 
-        $posts = $tag->posts;
+        $posts = $tag->posts()->paginate(2);
 
         return view('pages.list', ['posts' => $posts]);
     }
@@ -36,7 +36,7 @@ class HomeController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        $posts = $category->posts;
+        $posts = $category->posts()->paginate(2);;
 
         return view('pages.list', ['posts' => $posts]);
     }
